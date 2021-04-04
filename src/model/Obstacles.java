@@ -17,9 +17,10 @@ public class Obstacles extends Thread {
 		/**On vérifie que le joueur n'a pas perdu*/
 	   while(etat.continuer) {
 		   /**On met à jour la position des obstacles*/
-		    	etat.route.bougeObstacles();;
-		    try { Thread.sleep(20);}
+		    etat.route.bougeObstacles();;
+		    try { Thread.sleep(5);}
 	    	catch (Exception e) { e.printStackTrace(); }
+		    
 	    }
 	 }
 	

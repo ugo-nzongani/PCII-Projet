@@ -27,7 +27,8 @@ public class AcceuilB extends JPanel implements ActionListener{
 	/**Constantes*/
 		public static final int LARGEUR_FENETRE = Affichage.LARGEUR_FENETRE;
 		public static final int HAUTEUR_FENETRE = Affichage.HAUTEUR_FENETRE/2;
-		
+		JButton b = new JButton("Lancer sans obstacles en mouvement");
+		JButton b2 = new JButton("Lancer avec obstacles en mouvement");
 		
 	/**Constructeur*/
 		public AcceuilB() {
@@ -35,9 +36,10 @@ public class AcceuilB extends JPanel implements ActionListener{
 			setFocusable(true);
 			
 			/**Bouton utilisé pour lancer la partie*/
-				JButton b = new JButton("Normale");
 				b.addActionListener(this);
+				b2.addActionListener(this);
 				this.add(b);
+				this.add(b2);
 		}
 	
 		
@@ -55,6 +57,7 @@ public class AcceuilB extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if(e.getSource()==b) {
 		JFrame j = new JFrame("Test");
 		Etat e1 = new Etat();
 		/**Threads*/
@@ -67,9 +70,24 @@ public class AcceuilB extends JPanel implements ActionListener{
 			a1.start();
 			v.start();
 			t.start();
-			o.start();
+			//o.start();
 		createFenetre(j, e1.affichage);
-		
+		} else {
+			JFrame j = new JFrame("Test");
+			Etat e1 = new Etat();
+			/**Threads*/
+				Avancer a1 = new Avancer(e1);
+				Deplacements d = new Deplacements(e1);
+				Vitesse v = new Vitesse(e1);
+				Temps t = new Temps(e1);
+				Obstacles o = new Obstacles(e1);
+				d.start();
+				a1.start();
+				v.start();
+				t.start();
+				o.start();
+			createFenetre(j, e1.affichage);
+		}
 	}
 	
 	public void paint(Graphics g) {

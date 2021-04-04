@@ -21,7 +21,7 @@ public class Route {
 		public static final int Ecart = 200;
 		
 		/**Incrément du score*/
-		public static final int INCR = 8;
+		public static final int INCR = 5;
 	
 	/**Attributs*/
 	
@@ -98,6 +98,9 @@ public class Route {
 		/**Attribut représentant le score du joueur*/
 		public int score;
 	
+		/**Attribut qu'on utilise pour résoudre les problèmes liés au déplcament des obstacles*/
+		boolean bougeOb;
+		
 		public Etat etat;
 	
 	/**Constructeur*/
@@ -151,6 +154,8 @@ public class Route {
 		for(Point p:this.obstacles) {
 			//System.out.println(p);
 		}
+		
+		this.bougeOb=true;
 	}
 	
 	
@@ -308,7 +313,7 @@ public class Route {
 				/**On ajoute également les points à la liste que l'on va utiliser pour la cas où la voiture franchit un point de contrôle*/
 				/**On met à jour le compteur, chargé de l'écart de plus en plus grand entre les points de contrôle*/
 				/**On a décidé de placer la limite de la distance maximale entre les points de contrôle à 500*/
-				if(this.add!=5000) {
+				if(this.add!=3000) {
 						this.add=this.add+250;
 				}
 				/**On met à jour la distance entre les points de contrôle*/
@@ -370,7 +375,7 @@ public class Route {
 	
 	
 	/**Méthode qui renvoie les obstacle visibles*/
-	public ArrayList<Point> getObstacles(){
+	public ArrayList<Point> getObstacles(){ 
 		ArrayList<Point> res = new ArrayList<Point>();
 		for(int i=0;i<this.obstacles.size();i++) {
 			Point p = this.obstacles.get(i);
@@ -378,7 +383,7 @@ public class Route {
 			if(p.y<=Affichage.HAUTEUR_FENETRE-this.score) {
 				res.add(new Point(p.x,p.y+this.score));
 			} else {
-				this.obstacles.remove(p);
+				this.obstacles.remove(i);
 				this.dirOb.remove(i);
 				this.xOb.remove(i);
 				i-=1;
@@ -387,7 +392,18 @@ public class Route {
 		return res;
 	}
 	
-	
+	/**Méthode qu'on utilise pour effacer les ostacles lorsqu'ils sortent de l'écran*/
+	public void delOb() {
+		for(int i=0;i<this.obstacles.size();i++) {
+			Point p = this.obstacles.get(i);
+			if(p.y>Affichage.HAUTEUR_FENETRE-this.score) {
+				this.obstacles.remove(i);
+				this.dirOb.remove(i);
+				this.xOb.remove(i);
+				i-=1;
+			}
+		}
+	}
 	
 	/**Méthode qui renvoie le score du joueur*/
 	public int getScore() {
@@ -404,7 +420,8 @@ public class Route {
 	public void bougeObstacles() {
 		for(int i=0;i<this.obstacles.size();i++) {
 			Point p = this.obstacles.get(i);
-			if(this.dirOb.get(i)) {
+			if(i<this.obstacles.size()) {
+				if(this.dirOb.get(i)) {
 				/**Si l'obstacle se déplace vers la gauche*/
 				int xO = p.x - 1;
 				/**on vérifie que l'extremité de la route n'a pas été atteinte*/
@@ -415,7 +432,7 @@ public class Route {
 				}
 				/**On met à jour la liste d'obstacles*/
 				this.obstacles.set(i, new Point(xO,p.y));
-			} else {
+				} else {
 				/**Si l'obstacle se déplace vers la droite*/
 				int xO = p.x + 1;
 				if(xO+this.largeurOb>=this.xOb.get(i)+this.Ecart) {
@@ -426,7 +443,10 @@ public class Route {
 				this.obstacles.set(i, new Point(xO,p.y));
 			}
 		}
+		//System.out.println("OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+		//System.out.println("OBSTACLES: "+this.obstacles.size());
+		//System.out.println("DIROB :"+this.dirOb.size());
+		//System.out.println("XOB :"+this.xOb.size());
 	}
-	
-
+	}
 }

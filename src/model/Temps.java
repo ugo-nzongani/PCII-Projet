@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileNotFoundException;
+
 /**Thread utilisé pour décrementer le temps*/
 public class Temps extends Thread {
 
@@ -18,7 +20,12 @@ public class Temps extends Thread {
 	   while(etat.continuer) {
 		   
 		   /**On met à jour le temps*/
-	    		etat.majTemps();
+	    		try {
+					etat.majTemps();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 	   
 	    	try { Thread.sleep(1);}
 	    	catch (Exception e) { e.printStackTrace(); }

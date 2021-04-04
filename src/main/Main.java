@@ -1,17 +1,10 @@
 package main;
 import java.awt.BorderLayout;
-import java.awt.Frame;
 import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import control.Control;
-import control.Deplacements;
-import model.Avancer;
-import model.Etat;
-import model.Temps;
-import model.Vitesse;
 import view.AcceuilB;
 import view.AcceuilA;
 

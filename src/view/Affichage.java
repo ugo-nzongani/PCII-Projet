@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Point2D.Double;
@@ -82,9 +83,9 @@ public class Affichage extends JPanel{
 			this.t = Toolkit.getDefaultToolkit();
 			this.t2 = Toolkit.getDefaultToolkit();
 			this.t3 = Toolkit.getDefaultToolkit();
-			this.i = t.getImage("C:\\Users\\gamin\\eclipse-workspace\\voiture\\src\\view\\car423.png");
-			this.i2 = t2.getImage("C:\\Users\\gamin\\eclipse-workspace\\voiture\\src\\view\\car423g.png");
-			this.i3 = t3.getImage("C:\\Users\\gamin\\eclipse-workspace\\voiture\\src\\view\\car423d.png");
+			this.i = t.getImage("src\\view\\car423.png");
+			this.i2 = t2.getImage("src\\view\\car423g.png");
+			this.i3 = t3.getImage("src\\view\\car423d.png");
 		}
 		
 	
@@ -111,16 +112,32 @@ public class Affichage extends JPanel{
 		for(int i = 0; i < etat.route.getRouteGauche().size()-1; i++) {
 			Point p1 = etat.route.getRouteGauche().get(i);
 			Point p2 = etat.route.getRouteGauche().get(i+1);
+			Color route = new Color(204,204,204);
+			g.setColor(route);
+			int []xR= {p1.x+decalage,p2.x+decalage,p2.x+etat.route.Ecart+decalage,p1.x+etat.route.Ecart+decalage};
+			int []yR= {p1.y,p2.y,p2.y,p1.y};
+			int []xG = {EX_GAUCHE+decalage,p1.x+decalage,p2.x+decalage,EX_GAUCHE+decalage};
+			int []xD = {p1.x+etat.route.Ecart+decalage,EX_DROITE+decalage,EX_DROITE+decalage,p2.x+etat.route.Ecart+decalage};
+			int []yG = {p1.y,p1.y,p2.y,p2.y};
+			int []yD = {p1.y,p1.y,p2.y,p2.y};
+			g.setColor(route);
+			g.fillPolygon(xR, yR, 4);
+			Color hors_piste = new Color(204,0,0);
+			g.setColor(hors_piste);
+			g.fillPolygon(xG, yG, 4);
+			g.fillPolygon(xD,yD,4);
+			g.setColor(Color.BLACK);
 			/**Extremité gauche*/
 			g.drawLine(p1.x+decalage, p1.y, p2.x+decalage, p2.y);
 			/**Extremité droite*/
 			g.drawLine(p1.x+etat.route.Ecart+decalage, p1.y, p2.x+etat.route.Ecart+decalage, p2.y);
-		}
+			}
 	}
 	
 	
 	/**Affichage des points de controle*/
 	public void paintPointDeControle(Graphics g) {
+		g.setColor(Color.RED);
 		for(Point p:this.etat.route.getPointDeControle()) {
 			g.drawLine(p.x+decalage,p.y,p.x+this.etat.route.Ecart+decalage,p.y);
 		}
@@ -130,13 +147,27 @@ public class Affichage extends JPanel{
 	public void paintDecor(Graphics g) {
 		/**Horizon*/
 		g.clearRect(0,0,LARGEUR_FENETRE,Decor.HORIZON);
+		Color ciel = new Color(51,204,255);
+		g.setColor(ciel);
+		g.fillRect(EX_GAUCHE+decalage, 0, 1000, Decor.HORIZON);
+		Color montagnes = new Color(51,0,0);
+		g.setColor(montagnes);
         g.drawLine(EX_GAUCHE+decalage, Decor.HORIZON, EX_DROITE+decalage, Decor.HORIZON);
+        int []xD = new int[this.decor.pointList.size()+2];
+        xD[0]=EX_GAUCHE+decalage;
+        xD[this.decor.pointList.size()+1]=EX_DROITE+decalage;
+        int []yD = new int[this.decor.pointList.size()+2];
+        yD[0]=Decor.HORIZON;
+        yD[this.decor.pointList.size()+1]=Decor.HORIZON;
     	/**Montagnes*/
-        for(int i = 0; i < this.decor.pointList.size()-1; i++) {
+        for(int i = 0; i < this.decor.pointList.size(); i++) {
         	Point p1 = this.decor.pointList.get(i);
-        	Point p2 = this.decor.pointList.get(i+1);
-        	g.drawLine(p1.x+decalage, p1.y, p2.x+decalage, p2.y);
+        	//Point p2 = this.decor.pointList.get(i+1);
+        	//g.drawLine(p1.x+decalage, p1.y, p2.x+decalage, p2.y);
+        	xD[i+1]=p1.x+decalage;
+        	yD[i+1]=p1.y;
         }
+        g.fillPolygon(xD, yD, this.decor.pointList.size()+2);
         /**Extremités de l'écran*/
         g.drawLine(EX_GAUCHE+decalage, LARGEUR_FENETRE, EX_GAUCHE+decalage, 0);
         g.drawLine(EX_DROITE+decalage, LARGEUR_FENETRE, EX_DROITE+decalage, 0);
@@ -173,9 +204,10 @@ public class Affichage extends JPanel{
 		
 	/**Affichage des obstacles*/
 	public void paintObstacles(Graphics g) {
+		g.setColor(Color.BLACK);
 		for(int i=0;i<this.etat.route.getObstacles().size();i++) {
 			Point p = this.etat.route.getObstacles().get(i);
-			g.drawOval(p.x+decalage,p.y,this.etat.route.largeurOb,this.etat.route.hauteurOb);
+			g.fillOval(p.x+decalage,p.y,this.etat.route.largeurOb,this.etat.route.hauteurOb);
 		}
 	}
 		

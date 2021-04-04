@@ -1,5 +1,7 @@
 package model;
 
+import java.io.FileNotFoundException;
+
 /**Thread utilisé pour le calcul de la vitesse*/
 public class Vitesse extends Thread{
 	
@@ -17,7 +19,12 @@ public class Vitesse extends Thread{
 		/**On vérifie que le joueur n'a pas perdu*/
 	   while(etat.continuer) {
 		    /**On modifie la vitesse de la voiture*/
-	    		etat.calcul_Vit();
+	    		try {
+					etat.calcul_Vit();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 	    		
 	    	try { Thread.sleep((int)etat.avance);}
 	    	catch (Exception e) { e.printStackTrace(); }

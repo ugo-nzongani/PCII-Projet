@@ -24,8 +24,8 @@ public class AcceuilA extends JPanel {
 		super.paint(g);
 		String v1 = "JEU";
 		g.drawString(v1, LARGEUR_FENETRE/2-25, 12);
-		String v2 = "Choisir la difficulté :";
-		g.drawString(v2, (LARGEUR_FENETRE/2)-50, HAUTEUR_FENETRE-12);
+		String v2 = "Lancer la partie :";
+		g.drawString(v2, (LARGEUR_FENETRE/2)-43, HAUTEUR_FENETRE-12);
 	}
 
 }
